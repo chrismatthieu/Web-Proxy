@@ -1,0 +1,9 @@
+#generalform input:focus, textarea:focus {background: none repeat scroll 0 0 #FFFF99; line-height:30px; font-size: 30px;}
+#generalform input, textarea {line-height:30px; font-size: 30px; }
+
+#generalform button, input{
+	padding:5px 10px;
+	color:#666666;
+	background-color:#F7F7F7;
+	border:1px solid #CCCCCC;
+	}
