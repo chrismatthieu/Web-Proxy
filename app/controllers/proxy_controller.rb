@@ -3,7 +3,7 @@ class ProxyController < ApplicationController
   def proxy
     
     # site_url =  request.env["REQUEST_URI"][0..request.env["REQUEST_URI"].index("/proxy")-1] # prefix i.e. "http://localhost:3000"
-    site_url = "http://zappos.com"
+    site_url = "http://webproxy.heroku.com"
     if params[:lnk]
       @url = params[:lnk]
     else
