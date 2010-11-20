@@ -2,8 +2,15 @@ class ProxyController < ApplicationController
   
   def proxy
     
+    # DIDNT WORK IN PROD
     # site_url =  request.env["REQUEST_URI"][0..request.env["REQUEST_URI"].index("/proxy")-1] # prefix i.e. "http://localhost:3000"
-    site_url = "http://webproxy.heroku.com"
+    
+    if request.env["REQUEST_URI"].index("http://localhost")
+      site_url = "http://localhost:3000"
+    else
+      site_url = "http://webproxy.heroku.com"
+    end
+    
     if params[:lnk]
       @url = params[:lnk]
     else
@@ -120,9 +127,13 @@ class ProxyController < ApplicationController
       end
           
     else
-      a.get(@url) do |page|
-        @rawdoc =  page.body 
-      end    
+      begin
+        a.get(@url) do |page| 
+          @rawdoc =  page.body 
+        end    
+      rescue
+        @rawdoc = "Page not found"
+      end
     end
     
     
