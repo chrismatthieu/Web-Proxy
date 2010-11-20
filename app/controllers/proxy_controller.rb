@@ -3,10 +3,10 @@ class ProxyController < ApplicationController
   def proxy
     
     site_url =  request.env["REQUEST_URI"][0..request.env["REQUEST_URI"].index("/proxy")-1] # prefix i.e. "http://localhost:3000"
-    if params[:url].blank?
-      @url   = URI.unescape(request.env["QUERY_STRING"][4..request.env["QUERY_STRING"].length]) #Full URL from querystring url= "http://..."
+    if params[:lnk]
+      @url = params[:lnk]
     else
-      @url = params[:url]
+      @url   = URI.unescape(request.env["QUERY_STRING"][4..request.env["QUERY_STRING"].length])  #Full URL from querystring url= "http://..."
     end
     method = request.env["REQUEST_METHOD"]
     data   = request.env["RAW_POST_DATA"] #if empty add the actual querystring to data
@@ -50,12 +50,67 @@ class ProxyController < ApplicationController
 
     
     a = Mechanize.new { |agent|
-      agent.user_agent_alias = 'Mac Safari'
+      agent.user_agent_alias = 'Mac Safari' #TODO pass user's browser type
+      # User Agent aliases
+        # AGENT_ALIASES = {
+        #   'Windows IE 6' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)',
+        #   'Windows IE 7' => 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)',
+        #   'Windows Mozilla' => 'Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.4b) Gecko/20030516 Mozilla Firebird/0.6',
+        #   'Mac Safari' => 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; de-at) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10',
+        #   'Mac FireFox' => 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2) Gecko/20100115 Firefox/3.6',
+        #   'Mac Mozilla' => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; rv:1.4a) Gecko/20030401',
+        #   'Linux Mozilla' => 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.4) Gecko/20030624',
+        #   'Linux Firefox' => 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.1) Gecko/20100122 firefox/3.6.1',
+        #   'Linux Konqueror' => 'Mozilla/5.0 (compatible; Konqueror/3; Linux)',
+        #   'iPhone' => 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1C28 Safari/419.3',
+        #   'Mechanize' => "WWW-Mechanize/#{VERSION} (http://rubyforge.org/projects/mechanize/)"
+        # }
     }
-    a.get(@url) do |page|
-      @rawdoc =  page.body 
-    end    
     
+    # Page request from form
+    if params[:verb]
+      
+      if params[:verb] == 'get' 
+        puts params
+        puts @url
+        
+        #Add a question mark to the end of the base url if one does not exist
+        if @url.index('?') == nil
+          @url << '?'
+        end
+
+        #Build params query string
+        params.each do |k, v|
+          if k != 'lnk' and k != 'verb'
+            @url << "&#{k}=#{v}"
+          end
+         end
+        
+        a.get(@url) do |page|
+          @rawdoc =  page.body 
+        end
+      else
+        
+        # page = browser.post('http://www.mysite.com/login', {
+        #   "email" => "myemail%40gmail.com",
+        #   "password" => "something",
+        #   "remember" => "1",
+        #   "loginSubmit" => "Login",
+        #   "url" => ""
+        # })
+        
+        @rawdoc = a.post(@url, {
+          #Build params query string
+          # params
+        })
+        
+      end
+          
+    else
+      a.get(@url) do |page|
+        @rawdoc =  page.body 
+      end    
+    end
     
     
     # FORMAT HTML CONTENT 
@@ -82,7 +137,7 @@ class ProxyController < ApplicationController
         #not anchor 
         if a['href'] != nil and a['href'] != "#"
 
-          link = site_url + '/proxy' + '?url=' + URI.escape(link.strip)
+          link = site_url + '/proxy' + '?lnk=' + URI.escape(link.strip)
           a['href'] = link
 
         end
@@ -152,6 +207,12 @@ class ProxyController < ApplicationController
         else
           link = a['action']
         end
+        
+        method = a['method']
+        if !method
+          method = "get"
+        end
+        method.downcase
     
         link.gsub!("http:///", @baseurl) #added to test localhost entries
     
@@ -165,9 +226,15 @@ class ProxyController < ApplicationController
           # Add hidden input text form with url
           lnk_node = Nokogiri::XML::Node.new('input', a)
           lnk_node['type'] = 'hidden'
-          lnk_node['name'] = 'url'
+          lnk_node['name'] = 'lnk'
           lnk_node['value'] = URI.escape(formaction.strip)
-          # a.add_child(lnk_node)
+          a.add_child(lnk_node)
+
+          # Add hidden input text form with verb
+          lnk_node = Nokogiri::XML::Node.new('input', a)
+          lnk_node['type'] = 'hidden'
+          lnk_node['name'] = 'verb'
+          lnk_node['value'] = method
           a.add_child(lnk_node)
 
         end
