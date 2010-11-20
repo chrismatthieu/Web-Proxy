@@ -131,13 +131,17 @@ class ProxyController < ApplicationController
     @doc.xpath('//a|//area').each { |a|
 
       #regular link found
-      if a['href'] != nil
+      if a['href'] != nil and a['href'][0..0] != "#" # dont process for anchor tags
         
         if a['href'].index('http://') == nil and a['href'].index('https://') == nil
           if a['href'] == "/"
             link = @baseurl
           else
-            link = @baseurl + a['href']                  
+            if @baseurl[@baseurl.length..@baseurl.length] == '/' or a['href'][0..0] == "/"
+              link = @baseurl + a['href']
+            else
+              link = @baseurl + '/' + a['href']
+            end
           end
         else
           link = a['href']                
@@ -194,7 +198,11 @@ class ProxyController < ApplicationController
             if a['href'] == "/"
               link = @baseurl
             else
-              link = @baseurl + a['href']
+              if @baseurl[@baseurl.length..@baseurl.length] == '/' or a['href'][0..0] == "/"
+                link = @baseurl + a['href']
+              else
+                link = @baseurl + '/' + a['href']
+              end
             end
           else
             link = a['href']
@@ -203,6 +211,7 @@ class ProxyController < ApplicationController
           link.gsub!("http:///", @baseurl) #added to test localhost entries
 
           link = link.strip
+          # link = site_url + '/proxy' + '?lnk=' + URI.escape(link.strip)
           a['href'] = link
           
         end
@@ -217,7 +226,11 @@ class ProxyController < ApplicationController
           if a['action'] == "/"
             link = @baseurl
           else
-            link = @baseurl + a['action']                  
+            if @baseurl[@baseurl.length..@baseurl.length] == '/' or a['action'][0..0] == "/"
+              link = @baseurl + a['action']
+            else
+              link = @baseurl + '/' + a['action']
+            end
           end
         else
           link = a['action']
