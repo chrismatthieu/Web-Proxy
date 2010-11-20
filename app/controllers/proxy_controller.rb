@@ -71,8 +71,8 @@ class ProxyController < ApplicationController
     if params[:verb]
       
       if params[:verb] == 'get' 
-        puts params
-        puts @url
+        # puts params
+        # puts @url
         
         #Add a question mark to the end of the base url if one does not exist
         if @url.index('?') == nil
@@ -89,7 +89,8 @@ class ProxyController < ApplicationController
         a.get(@url) do |page|
           @rawdoc =  page.body 
         end
-      else
+        
+      else #POST
         
         # page = browser.post('http://www.mysite.com/login', {
         #   "email" => "myemail%40gmail.com",
@@ -99,11 +100,21 @@ class ProxyController < ApplicationController
         #   "url" => ""
         # })
         
-        @rawdoc = a.post(@url, {
-          #Build params query string
-          # params
-        })
-        
+          #THERE HAS GOT TO BE A BETTER WAY TO FORMAT PARAMS FOR MECHANIZE POST
+          paramsstring = ""
+          s = params.to_query
+          paramsarray = s.split('&')
+          paramsarray.each do |element|
+            elementarray = element.split('=')
+              if  !elementarray[1].nil?
+                paramsstring << '"' + elementarray[0] + '" => "' +  URI.unescape(elementarray[1]) + '", '
+              end
+          end
+                    
+          # TEST = http://www.cs.unc.edu/~jbs/resources/perl/perl-cgi/programs/form1-POST.html
+          page = a.post(@url, eval("{" + paramsstring.chop.chop + "}")) 
+          @rawdoc = page.body
+
       end
           
     else
@@ -153,7 +164,11 @@ class ProxyController < ApplicationController
             if a['src'] == "/"
               link = @baseurl
             else
-              link = @baseurl + a['src']
+              if @baseurl[@baseurl.length..@baseurl.length] == '/' or a['src'][0..0] == "/"
+                link = @baseurl + a['src']
+              else
+                link = @baseurl + '/' + a['src']
+              end
             end
           else
             link = a['src']

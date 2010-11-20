@@ -2,11 +2,8 @@
 
 This is a Rails 3 HTTP Proxy application.  It allows users to surf the web through a single URL thus either masking their browsing experience or rendering pages in other frames on a page.  Page frames are not able to share content state.  This approach circumvents the browser's security design.
 
-The HTTP page fetches with redirection handling and cookie jar support were inspired by:
-http://oldwiki.rubyonrails.org/rails/pages/HowToRenderProxiedPages
-
 You can browse pages with the following URL structure:
-http://localhost:3000/proxy?url=http://amazon.com
+http://localhost:3000/proxy?lnk=http://zappos.com
 
 
 
