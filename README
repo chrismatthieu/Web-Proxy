@@ -5,6 +5,4 @@ This is a Rails 3 HTTP Proxy application.  It allows users to surf the web throu
 You can browse pages with the following URL structure:
 http://localhost:3000/proxy?lnk=http://zappos.com
 
-
-
 Copyright 2010 Chris Matthieu 

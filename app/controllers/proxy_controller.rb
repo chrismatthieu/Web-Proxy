@@ -6,10 +6,12 @@ class ProxyController < ApplicationController
     # site_url =  request.env["REQUEST_URI"][0..request.env["REQUEST_URI"].index("/proxy")-1] # prefix i.e. "http://localhost:3000"
     
     if request.env["REQUEST_URI"].index("http://localhost")
-      site_url = "http://localhost:3000"
+      site_url = "http://localhost:3000/proxy"
     else
-      site_url = "http://webproxy.heroku.com"
+      site_url = "http://webproxy.heroku.com/proxy"
     end
+    
+# INSERT START
     
     if params[:lnk]
       @url = params[:lnk]
@@ -165,7 +167,7 @@ class ProxyController < ApplicationController
         #not anchor 
         if a['href'] != nil and a['href'] != "#"
 
-          link = site_url + '/proxy' + '?lnk=' + URI.escape(link.strip)
+          link = site_url + '?lnk=' + URI.escape(link.strip)
           a['href'] = link
 
         end
@@ -224,7 +226,7 @@ class ProxyController < ApplicationController
           link.gsub!("http:///", @baseurl) #added to test localhost entries
 
           link = link.strip
-          # link = site_url + '/proxy' + '?lnk=' + URI.escape(link.strip)
+          # link = site_url + '?lnk=' + URI.escape(link.strip)
           a['href'] = link
           
         end
@@ -260,7 +262,7 @@ class ProxyController < ApplicationController
         if a['action'] != nil and a['action'] != "#"
           
           formaction = link.strip
-          link = site_url + '/proxy' + '?url=' + URI.escape(link.strip)
+          link = site_url + '?url=' + URI.escape(link.strip)
     
           a['action'] = link     
 
@@ -308,6 +310,8 @@ class ProxyController < ApplicationController
     #Remove frame breaking javascript
     @finaldoc.gsub(".location.replace", "") 
     
+
+# INSERT END
 
     render :layout => false
 

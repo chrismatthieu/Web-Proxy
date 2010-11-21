@@ -1,0 +1,33 @@
+Notes:
+
+Determines the size of an image:
+<script>
+function onImageLoad(aEvent) {
+	  alert("width:" + aEvent.target.width + "\nheight:" + aEvent.target.height);
+	}
+	
+var img = document.createElementNS("http://www.w3.org/1999/xhtml","html:img");
+img.addEventListener("load", onImageLoad, false);
+img.src = "http://upload.wikimedia.org/wikipedia/commons/0/06/Gigantactis.jpg";
+</script>
+
+OR largest image on the page:
+
+<script>
+var sHTML = getHTMLSomehow(sURL);
+var nMaxDim = 0;
+var $pageDOM = $(sHTML);
+var $objMaxDimImage;
+
+$pageDOM.("img").each(function(){
+    var $this = $(this);
+    var nDim = parseFloat($this.width()) * parseFloat($(this).height());
+    if (nDim > nMaxDim){
+        $objMaxDimImage = $this;
+        nMaxDim = nDim
+    }
+});
+
+alert("Max dim is:" nMaxDim);
+alert("Image Source:" $objMaxDimImage.attr("src"));
+</script>
