@@ -13,8 +13,8 @@ class ProxyController < ApplicationController
     
 # INSERT START
     
-    if params[:lnk]
-      @url = params[:lnk]
+    if params[:formlnk]
+      @url = params[:formlnk]
     else
       @url   = URI.unescape(request.env["QUERY_STRING"][4..request.env["QUERY_STRING"].length])  #Full URL from querystring url= "http://..."
     end
@@ -269,7 +269,7 @@ class ProxyController < ApplicationController
           # Add hidden input text form with url
           lnk_node = Nokogiri::XML::Node.new('input', a)
           lnk_node['type'] = 'hidden'
-          lnk_node['name'] = 'lnk'
+          lnk_node['name'] = 'formlnk'
           lnk_node['value'] = URI.escape(formaction.strip)
           a.add_child(lnk_node)
 
