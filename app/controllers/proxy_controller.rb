@@ -294,7 +294,7 @@ class ProxyController < ApplicationController
     @finaldoc = @doc.to_s 
         
     # #Check for any links that may be hiding in javascripts
-    # @finaldoc.gsub("href='/", "href='" + site_url + "/proxy?url=" + @baseurl)
+    @finaldoc.gsub("href='/", "href='" + site_url + "?url=" + @baseurl + "/")
     # 
     # #prepend baseurl on src tags in javascript
      @finaldoc = @finaldoc.gsub('src="/', 'src="' + @baseurl + '/' ) 
