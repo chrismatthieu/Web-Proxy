@@ -217,8 +217,14 @@ class ProxyController < ApplicationController
           if a['src'] != nil and a['src'] != "#"
 
             link = link.strip
-            a['src'] = link
-
+            # puts a['element']
+            # if a['element'] == "script"
+              # link = site_url + '?lnk=' + URI.escape(link.strip)
+              # a['src'] = link
+            # else
+              a['src'] = link
+            # end
+            
           end
         end
     }
@@ -305,18 +311,20 @@ class ProxyController < ApplicationController
     
     ##FINAL MISC CLEANUP
     @finaldoc = @doc.to_s 
-    
+        
     # #Check for any links that may be hiding in javascripts
-    # @finaldoc.gsub("href='/", "href='" + site_url + "/proxy?url=" + @baseurl)
+    @finaldoc.gsub("href='/", "href='" + site_url + "?url=" + @baseurl + "/")
     # 
     # #prepend baseurl on src tags in javascript
-    # @finaldoc.gsub('src="/', 'src="' + @baseurl + '/' ) 
+     @finaldoc = @finaldoc.gsub('src="/', 'src="' + @baseurl + '/' ) 
     # 
     # #Why does Amazon care about Firefox browsers?
-    # @finaldoc.gsub('Firefox', 'FirefoxWTF' ) 
+     @finaldoc = @finaldoc.gsub('Firefox', 'FirefoxWTF' ) 
 
     # FIX JAVASCRIPT RELEATIVE URLS
-    # @finaldoc.gsub("script('/", "script('" + @baseurl)
+    @finaldoc = @finaldoc.gsub("script('/", "script('" + @baseurl + '/')
+
+     @finaldoc = @finaldoc.gsub("'/", "'" + @baseurl + '/')
 
     # #Hack to remove double wacks in URL ie http://sunsounds.org//audio//programs
     # @finaldoc.gsub!("://", "/::")
@@ -324,10 +332,10 @@ class ProxyController < ApplicationController
     # @finaldoc.gsub!("/::", "://")         
     
     #Add baseURL to code within embedded styles
-    @finaldoc.gsub("url(/", "url(" + @baseurl)  
+     @finaldoc = @finaldoc.gsub("url(/", "url(" + @baseurl + '/')  
     
     #Remove frame breaking javascript
-    @finaldoc.gsub(".location.replace", "") 
+     @finaldoc = @finaldoc.gsub(".location.replace", "") 
     
 
 # INSERT END
