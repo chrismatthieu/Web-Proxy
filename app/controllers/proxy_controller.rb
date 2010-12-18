@@ -121,6 +121,25 @@ class ProxyController < ApplicationController
                 paramsstring << '"' + elementarray[0] + '" => "' +  URI.unescape(elementarray[1]) + '", '
               end
           end
+          
+          #Fix Amazon logins
+          if @url.index('https://www.amazon.com/ap/sign-in')
+            paramsstring << '"useRedirectOnSuccess" => "1", '
+            paramsstring << '"protocol" => "https", '
+            paramsstring << '"referer" => "flex", '
+            paramsstring << '"sessionId" => "' + params[:sessionId] + '", '
+            paramsstring << '"password" => "' + params[:password] + '", '
+            paramsstring << '"email" => "' + params[:email] + '", '
+            paramsstring << '"query" => "flex", '
+            paramsstring << '"metadata2" => "unknown", '
+            paramsstring << '"metadata3" => "unknown", '
+            paramsstring << '"action" => "sign-in", '
+            
+            # paramlist = '-d "disableCorpSignUp=&x=152&y=11&mode=&useRedirectOnSuccess=1&protocol=https&referer=flex&path=/gp/yourstore&sessionId=' + params[:sessionId] + '&password=' + params[:password] + '&pageAction=/gp/yourstore&redirectProtocol=&metadataf1=&metadata2=unknown&metadata3=unknown&action=sign-in&email=' + params[:email] + '&query=signIn=1&ref_=pd_irl_gw' + '"'
+            # curlverb = ''
+          end
+          
+          
                     
           # TEST = http://www.cs.unc.edu/~jbs/resources/perl/perl-cgi/programs/form1-POST.html
           page = a.post(@url, eval("{" + paramsstring.chop.chop + "}")) 
