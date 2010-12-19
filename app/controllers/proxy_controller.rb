@@ -1,4 +1,6 @@
+
 class ProxyController < ApplicationController
+
   
   def proxy
     
@@ -76,6 +78,14 @@ class ProxyController < ApplicationController
         #   'Mechanize' => "WWW-Mechanize/#{VERSION} (http://rubyforge.org/projects/mechanize/)"
         # }
     }
+    
+    # Setup Cookie Jar
+    #works from file
+    # a.cookie_jar.load("mycookies.txt", format = :yaml) rescue ""
+
+    require 'yaml'
+    a.cookie_jar = YAML.load(session[:mycookies]) if !session[:mycookies].nil?
+
     
     # Page request from form
     if params[:verb]
@@ -156,7 +166,12 @@ class ProxyController < ApplicationController
         @rawdoc = "Page not found"
       end
     end
-    
+        
+    #works to file
+    # a.cookie_jar.save_as("mycookies.txt", format = :yaml )
+
+    session[:mycookies] = a.cookie_jar.to_yaml
+
     
     # FORMAT HTML CONTENT 
     @doc = Nokogiri::HTML(@rawdoc)
@@ -312,30 +327,30 @@ class ProxyController < ApplicationController
     ##FINAL MISC CLEANUP
     @finaldoc = @doc.to_s 
         
-    # #Check for any links that may be hiding in javascripts
-    @finaldoc.gsub("href='/", "href='" + site_url + "?url=" + @baseurl + "/")
+    # # #Check for any links that may be hiding in javascripts
+    # @finaldoc.gsub("href='/", "href='" + site_url + "?url=" + @baseurl + "/")
+    # # 
+    # # #prepend baseurl on src tags in javascript
+    #  @finaldoc = @finaldoc.gsub('src="/', 'src="' + @baseurl + '/' ) 
+    # # 
+    # # #Why does Amazon care about Firefox browsers?
+    #  @finaldoc = @finaldoc.gsub('Firefox', 'FirefoxWTF' ) 
     # 
-    # #prepend baseurl on src tags in javascript
-     @finaldoc = @finaldoc.gsub('src="/', 'src="' + @baseurl + '/' ) 
+    # # FIX JAVASCRIPT RELEATIVE URLS
+    # @finaldoc = @finaldoc.gsub("script('/", "script('" + @baseurl + '/')
     # 
-    # #Why does Amazon care about Firefox browsers?
-     @finaldoc = @finaldoc.gsub('Firefox', 'FirefoxWTF' ) 
-
-    # FIX JAVASCRIPT RELEATIVE URLS
-    @finaldoc = @finaldoc.gsub("script('/", "script('" + @baseurl + '/')
-
-     @finaldoc = @finaldoc.gsub("'/", "'" + @baseurl + '/')
-
-    # #Hack to remove double wacks in URL ie http://sunsounds.org//audio//programs
-    # @finaldoc.gsub!("://", "/::")
-    # @finaldoc.gsub!("//", "/")
-    # @finaldoc.gsub!("/::", "://")         
-    
-    #Add baseURL to code within embedded styles
-     @finaldoc = @finaldoc.gsub("url(/", "url(" + @baseurl + '/')  
-    
-    #Remove frame breaking javascript
-     @finaldoc = @finaldoc.gsub(".location.replace", "") 
+    #  @finaldoc = @finaldoc.gsub("'/", "'" + @baseurl + '/')
+    # 
+    # # #Hack to remove double wacks in URL ie http://sunsounds.org//audio//programs
+    # # @finaldoc.gsub!("://", "/::")
+    # # @finaldoc.gsub!("//", "/")
+    # # @finaldoc.gsub!("/::", "://")         
+    # 
+    # #Add baseURL to code within embedded styles
+    #  @finaldoc = @finaldoc.gsub("url(/", "url(" + @baseurl + '/')  
+    # 
+    # #Remove frame breaking javascript
+    #  @finaldoc = @finaldoc.gsub(".location.replace", "") 
     
 
 # INSERT END

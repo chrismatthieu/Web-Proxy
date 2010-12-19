@@ -1,0 +1,81 @@
+--- 
+amazon.com: 
+  /: 
+    session-token: !ruby/object:Mechanize::Cookie 
+      comment: 
+      comment_url: 
+      discard: 
+      domain: amazon.com
+      expires: Fri, 13 Dec 2030 22:34:07 GMT
+      max_age: 630720000
+      name: session-token
+      path: /
+      port: 
+      secure: false
+      value: 7ZQgNZFqX00QZ6Ryq7JwPJ0dj0SoBnTy3TqZEsBU4ES8r9ZXfBgTAkw6vlufL/mHuVc33WM7eGEIjGMUM7wqtCk/yskBUzvNV7z13T2xuFzZrvJ80GziaLlUB99kg/M8UpKOpDHnNRuoEDe4HwPDBEAzglogcDP1SGxAj2icHsa5aH8LrUhBvidJzE2aphusRvm8S0wt0ZohpQT+mtOxnuqpLttacCFeK5FXH/47tWlxR2UQ9QgYdMaGkeB5vfWHE2sXVvFCq4FGoTvz9BfsYg==
+      version: 1
+    x-main: !ruby/object:Mechanize::Cookie 
+      comment: 
+      comment_url: 
+      discard: 
+      domain: amazon.com
+      expires: Fri, 13 Dec 2030 22:34:07 GMT
+      max_age: 630720000
+      name: x-main
+      path: /
+      port: 
+      secure: false
+      value: wYrrFuZv@?Z9CeyjpbaCjPdZ2fgxikjh
+      version: 1
+    session-id: !ruby/object:Mechanize::Cookie 
+      comment: 
+      comment_url: 
+      discard: 
+      domain: amazon.com
+      expires: Tue, 01 Jan 2036 15:00:01 GMT
+      max_age: 
+      name: session-id
+      path: /
+      port: 
+      secure: false
+      value: 187-6366811-4737949
+      version: 0
+    at-main: !ruby/object:Mechanize::Cookie 
+      comment: 
+      comment_url: 
+      discard: 
+      domain: amazon.com
+      expires: Fri, 13 Dec 2030 22:34:07 GMT
+      max_age: 630720000
+      name: at-main
+      path: /
+      port: 
+      secure: true
+      value: 4|qnG5ZkcqrQ135HybYZzBQ3TMcBWODQl3pq6inatqPb/v/z1bodA1C5WsCRedZ1TfRDm/XuM6HogDQNyuzjZKof0NOomy8vf2a+X8qZETA3MnkbDuCDmG7q/gVAGo0QJFLTJdLwIRItQ2dHzQeczHvAhoHhw6gSTPXQtjJMDQNQK+6FLoqRHkBd//ZRW+uOU0lczeVjKAHYtFGDdiWQXZDQ==
+      version: 1
+    session-id-time: !ruby/object:Mechanize::Cookie 
+      comment: 
+      comment_url: 
+      discard: 
+      domain: amazon.com
+      expires: Tue, 01 Jan 2036 15:00:01 GMT
+      max_age: 
+      name: session-id-time
+      path: /
+      port: 
+      secure: false
+      value: 2082787201l
+      version: 0
+    ubid-main: !ruby/object:Mechanize::Cookie 
+      comment: 
+      comment_url: 
+      discard: 
+      domain: amazon.com
+      expires: Tue, 01 Jan 2036 15:00:01 GMT
+      max_age: 
+      name: ubid-main
+      path: /
+      port: 
+      secure: false
+      value: 181-0656433-5745237
+      version: 0
