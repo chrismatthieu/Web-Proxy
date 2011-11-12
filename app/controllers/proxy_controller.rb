@@ -375,7 +375,12 @@ session[:mycookies] = a.cookie_jar.to_yaml rescue ""
 #Remove frame breaking javascript
  @finaldoc = @finaldoc.gsub(".location.replace", "") 
 
-
+#Remove special characters (diamond question marks)
+ cleaned = ""
+ @finaldoc.each_byte { |x|  cleaned << x unless x > 127   }
+ @finaldoc = cleaned
+ 
+ 
 # INSERT END
 
     render :layout => false
