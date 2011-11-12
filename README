@@ -3,6 +3,6 @@
 This is a Rails 3.1.1 HTTP Proxy application.  It allows users to surf the web through a single URL thus either masking their browsing experience or rendering pages in other frames on a page.  Page frames are not able to share content state.  This approach circumvents the browser's security design.
 
 You can browse pages with the following URL structure:
-http://localhost:3000/proxy?lnk=http://zappos.com
+http://localhost:3000/proxy?lnk=http://amazon.com
 
 Copyright 2010 Chris Matthieu 
