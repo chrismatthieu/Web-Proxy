@@ -1,16 +1,20 @@
 source 'http://rubygems.org'
+ruby '2.1.2'
 
-gem 'rails', '3.1.1'
+
+gem 'rails', '4.1.1'
+gem 'activerecord-session_store', github: 'rails/activerecord-session_store'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-group :assets do
-  gem 'sass-rails', "~> 3.1.1"
-  gem 'coffee-rails', "~> 3.1.1"
-  gem 'uglifier'
-end
+# Bootstrap
+gem 'bootstrap-sass'
+gem 'sass-rails', github: 'rails/sass-rails'
+gem 'coffee-rails'
+gem 'uglifier'
 gem 'jquery-rails'
+gem 'turbolinks'
 
 group :deployment do
 	gem 'mysql2'
