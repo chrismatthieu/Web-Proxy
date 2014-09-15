@@ -1,3 +1,4 @@
+@import "bootstrap"; 
 #generalform input:focus, textarea:focus {background: none repeat scroll 0 0 #FFFF99; line-height:30px; font-size: 30px; width: 500px;}
 #generalform input, textarea {line-height:30px; font-size: 30px;  }
 
